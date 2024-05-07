@@ -220,7 +220,8 @@
             this.Controls.Add(this.textBoxSurname);
             this.Controls.Add(this.label1);
             this.Name = "SendFeedbackWindow";
-            this.Text = "SendFeedbackWindow";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Отправить обращение";
             this.Load += new System.EventHandler(this.SendFeedbackWindow_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

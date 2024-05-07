@@ -46,11 +46,13 @@
             this.buttonBack.TabIndex = 20;
             this.buttonBack.Text = "Назад";
             this.buttonBack.UseVisualStyleBackColor = false;
+            this.buttonBack.Click += new System.EventHandler(this.buttonBack_Click);
             // 
             // dataGridViewTools
             // 
+            this.dataGridViewTools.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewTools.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewTools.Location = new System.Drawing.Point(18, 54);
+            this.dataGridViewTools.Location = new System.Drawing.Point(12, 54);
             this.dataGridViewTools.Name = "dataGridViewTools";
             this.dataGridViewTools.Size = new System.Drawing.Size(1444, 409);
             this.dataGridViewTools.TabIndex = 19;
@@ -74,7 +76,9 @@
             this.Controls.Add(this.dataGridViewTools);
             this.Controls.Add(this.label1);
             this.Name = "ToolsPanel";
-            this.Text = "ToolsPanel";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Редактирование/просмотр инструментов";
+            this.Load += new System.EventHandler(this.ToolsPanel_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTools)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

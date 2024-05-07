@@ -46,9 +46,11 @@
             this.buttonBack.TabIndex = 20;
             this.buttonBack.Text = "Назад";
             this.buttonBack.UseVisualStyleBackColor = false;
+            this.buttonBack.Click += new System.EventHandler(this.buttonBack_Click);
             // 
             // dataGridViewFeedback
             // 
+            this.dataGridViewFeedback.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewFeedback.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewFeedback.Location = new System.Drawing.Point(18, 54);
             this.dataGridViewFeedback.Name = "dataGridViewFeedback";
@@ -74,7 +76,9 @@
             this.Controls.Add(this.dataGridViewFeedback);
             this.Controls.Add(this.label1);
             this.Name = "FeedbackPanel";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "FeedbackPanel";
+            this.Load += new System.EventHandler(this.FeedbackPanel_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewFeedback)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

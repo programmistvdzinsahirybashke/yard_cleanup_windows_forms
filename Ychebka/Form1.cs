@@ -27,17 +27,12 @@ namespace Ychebka
                 string login = textBoxLogin.Text;
                 string password = textBoxPassword.Text;
 
-
-                string query = $"Select * from Сотрудники where логин=@login";
-
-
+                string query = $"SELECT * FROM Сотрудники WHERE логин=@login";
 
                 using (NpgsqlCommand cmd = new NpgsqlCommand(query, conn))
                 {
-
                     conn.Open();
                     cmd.Parameters.AddWithValue("@login", login);
-                    cmd.Parameters.AddWithValue("@password", password);
 
                     NpgsqlDataReader reader = cmd.ExecuteReader();
 
@@ -47,34 +42,44 @@ namespace Ychebka
 
                         int UserID = Convert.ToInt32(reader["сотрудник_id"].ToString());
                         string StoredPassword = reader["пароль"].ToString();
+                        int PositionID = Convert.ToInt32(reader["должность"].ToString());
 
+                        // Сравнение пароля
                         if (password == StoredPassword)
                         {
                             // Например, при аутентификации пользователя
                             UserData.UserID = UserID;
 
-                            MessageBox.Show("Успешная авторизация");
-                            UserMainWindow EmployeesPanel = new UserMainWindow();
-                            this.Hide();
-                            EmployeesPanel.Show();
+                            if (PositionID == 21)
+                            {
+                                // Открывать окно администратора
+                                AdminPanel AdminPanel = new AdminPanel();
+                                this.Hide();
+                                AdminPanel.Show();
+                            }
+                            else
+                            {
+                                // Открывать окно пользователя
+                                UserMainWindow userWindow = new UserMainWindow();
+                                this.Hide();
+                                userWindow.Show();
+                            }
                         }
                         else
                         {
-                            MessageBox.Show("Неверный пароль!");
-
+                            MessageBox.Show("Неверный логин или пароль!");
                         }
                     }
                     else
                     {
-                        MessageBox.Show("Неверный логин!");
+                        MessageBox.Show("Неверный логин или пароль!");
                     }
-
                 }
             }
-
         }
 
-            private void button2_Click(object sender, EventArgs e)
+
+        private void button2_Click(object sender, EventArgs e)
         {
             SendFeedbackWindow SendFeedbackWindow = new SendFeedbackWindow();
             this.Hide();
@@ -94,6 +99,21 @@ namespace Ychebka
         private void Form1_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        {
+          
+        }
+
+        private void Form1_KeyPress(object sender, KeyPressEventArgs e)
+        {
+
+        }
+
+        private void buttonLogin_KeyDown(object sender, KeyEventArgs e)
+        {
+          
         }
     }
 }

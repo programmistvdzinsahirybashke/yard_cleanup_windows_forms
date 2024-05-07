@@ -46,9 +46,11 @@
             this.buttonBack.TabIndex = 20;
             this.buttonBack.Text = "Назад";
             this.buttonBack.UseVisualStyleBackColor = false;
+            this.buttonBack.Click += new System.EventHandler(this.buttonBack_Click);
             // 
             // dataGridViewAddresses
             // 
+            this.dataGridViewAddresses.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewAddresses.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewAddresses.Location = new System.Drawing.Point(18, 54);
             this.dataGridViewAddresses.Name = "dataGridViewAddresses";
@@ -74,7 +76,9 @@
             this.Controls.Add(this.dataGridViewAddresses);
             this.Controls.Add(this.label1);
             this.Name = "AddressesPanel";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "AddressesPanel";
+            this.Load += new System.EventHandler(this.AddressesPanel_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewAddresses)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

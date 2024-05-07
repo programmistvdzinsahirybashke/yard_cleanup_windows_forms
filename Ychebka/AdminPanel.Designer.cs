@@ -50,6 +50,7 @@
             this.buttonOpenTasksPanel.TabIndex = 11;
             this.buttonOpenTasksPanel.Text = "Задачи";
             this.buttonOpenTasksPanel.UseVisualStyleBackColor = false;
+            this.buttonOpenTasksPanel.Click += new System.EventHandler(this.buttonOpenTasksPanel_Click);
             // 
             // buttonOpenEmployeesPanel
             // 
@@ -63,6 +64,7 @@
             this.buttonOpenEmployeesPanel.TabIndex = 10;
             this.buttonOpenEmployeesPanel.Text = "Работники";
             this.buttonOpenEmployeesPanel.UseVisualStyleBackColor = false;
+            this.buttonOpenEmployeesPanel.Click += new System.EventHandler(this.buttonOpenEmployeesPanel_Click);
             // 
             // label1
             // 
@@ -96,6 +98,7 @@
             this.buttonOpenAddressesPanel.TabIndex = 14;
             this.buttonOpenAddressesPanel.Text = "Адреса";
             this.buttonOpenAddressesPanel.UseVisualStyleBackColor = false;
+            this.buttonOpenAddressesPanel.Click += new System.EventHandler(this.buttonOpenAddressesPanel_Click);
             // 
             // buttonOpenToolsPanel
             // 
@@ -109,6 +112,7 @@
             this.buttonOpenToolsPanel.TabIndex = 13;
             this.buttonOpenToolsPanel.Text = "Инструменты";
             this.buttonOpenToolsPanel.UseVisualStyleBackColor = false;
+            this.buttonOpenToolsPanel.Click += new System.EventHandler(this.buttonOpenToolsPanel_Click);
             // 
             // buttonLogout
             // 
@@ -122,6 +126,7 @@
             this.buttonLogout.TabIndex = 16;
             this.buttonLogout.Text = "Выход";
             this.buttonLogout.UseVisualStyleBackColor = false;
+            this.buttonLogout.Click += new System.EventHandler(this.buttonLogout_Click);
             // 
             // buttonOpenFeedbackPanel
             // 
@@ -135,6 +140,7 @@
             this.buttonOpenFeedbackPanel.TabIndex = 15;
             this.buttonOpenFeedbackPanel.Text = "Обращения";
             this.buttonOpenFeedbackPanel.UseVisualStyleBackColor = false;
+            this.buttonOpenFeedbackPanel.Click += new System.EventHandler(this.buttonOpenFeedbackPanel_Click);
             // 
             // AdminPanel
             // 
@@ -150,7 +156,9 @@
             this.Controls.Add(this.buttonOpenEmployeesPanel);
             this.Controls.Add(this.label1);
             this.Name = "AdminPanel";
-            this.Text = "AdminPanel";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Панель администратора";
+            this.Load += new System.EventHandler(this.AdminPanel_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
