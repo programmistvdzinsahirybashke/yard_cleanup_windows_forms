@@ -198,9 +198,34 @@ namespace Ychebka
 
         private void SendFeedbackWindow_Load(object sender, EventArgs e)
         {
+            GenerateCaptcha();
             LoadCities();
         }
+        private string captchaCode;
 
+        private void GenerateCaptcha()
+        {
+            string chars = "ABCDUERTYUIOPasdzxcvbnfghjklqwe123456789";
+
+            Random random = new Random();
+
+            captchaCode = new string(Enumerable.Repeat(chars, 4).Select(s => s[random.Next(s.Length)]).ToArray());
+
+            captchaPictureBox.Image = DrawCaptcha(captchaCode);
+        }
+
+        private Bitmap DrawCaptcha(string code)
+        {
+            Bitmap bitmap = new Bitmap(captchaPictureBox.Width, captchaPictureBox.Height);
+            Graphics graphics = Graphics.FromImage(bitmap);
+
+            Font font = new Font("Arial", 12);
+            Brush brush = new SolidBrush(Color.Black);
+
+            graphics.DrawString(code, font, brush, 10, 10);
+
+            return bitmap;
+        }
         private void comboBoxCity_SelectedIndexChanged_1(object sender, EventArgs e)
         {
             comboBoxStreet.Text="";
@@ -228,138 +253,161 @@ namespace Ychebka
         private int zhitelId;
         private void buttonSendFeedback_Click(object sender, EventArgs e)
         {
-            using (NpgsqlConnection conn = new NpgsqlConnection(connectionString))
+            string enteredCode = textBox1.Text;
+            if (enteredCode == captchaCode)
             {
-                string name = textBoxName.Text;
-                string surname = textBoxSurname.Text;
-                string contacts = textBoxContact.Text;
-                string feedback_datetime_string = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
-                DateTime feedback_datetime = Convert.ToDateTime(feedback_datetime_string);
-                string feedbackText = textBox3.Text;
-
-                string query_add_zhitel = "INSERT INTO Жители (фамилия, имя, контактная_информация) VALUES (@surname, @name, @contacts) " +
-                    "ON CONFLICT (контактная_информация) DO NOTHING;";
-
-                conn.Open();
-                using (NpgsqlCommand cmd = new NpgsqlCommand(query_add_zhitel, conn))
+                using (NpgsqlConnection conn = new NpgsqlConnection(connectionString))
                 {
-                    try
+                    string name = textBoxName.Text;
+                    string surname = textBoxSurname.Text;
+                    string contacts = textBoxContact.Text;
+                    string feedback_datetime_string = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
+                    DateTime feedback_datetime = Convert.ToDateTime(feedback_datetime_string);
+                    string feedbackText = textBox3.Text;
+
+                    string query_add_zhitel = "INSERT INTO Жители (фамилия, имя, контактная_информация) VALUES (@surname, @name, @contacts) " +
+                        "ON CONFLICT (контактная_информация) DO NOTHING;";
+
+                    conn.Open();
+                    using (NpgsqlCommand cmd = new NpgsqlCommand(query_add_zhitel, conn))
                     {
-                        cmd.Parameters.AddWithValue("@name", name);
-                        cmd.Parameters.AddWithValue("@surname", surname);
-                        cmd.Parameters.AddWithValue("@contacts", contacts);
-
-                        cmd.ExecuteNonQuery();
-                    }
-                    catch (Exception ex)
-                    {
-
-                        MessageBox.Show($"Произошла ошибка: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-
-                }
-                //получени двора по адресу
-                string query_dvor_by_names = $"SELECT двор_id\r\n    " +
-                  $"    FROM Дворы\r\n    " +
-                  $"    inner join Улицы on Дворы.улица  = Улицы.улица_id\r\n    " +
-                  $"    inner join Города on Дворы.город  = Города.город_id\r\n    " +
-                  $"    WHERE Города.название = @selectedCity and Улицы.название = @selectedStreet and Улицы.номер = @selectedNumber;";
-
-                using (NpgsqlCommand cmd = new NpgsqlCommand(query_dvor_by_names, conn))
-                {
-                    try
-                    {
-                        string selectedCity = comboBoxCity.SelectedItem.ToString();
-                        string selectedStreet = comboBoxStreet.SelectedItem.ToString();
-                        string selectedNumber = comboBoxNumber.SelectedItem.ToString();
-
-                        cmd.Parameters.AddWithValue("@selectedCity", selectedCity);
-                        cmd.Parameters.AddWithValue("@selectedStreet", selectedStreet);
-                        cmd.Parameters.AddWithValue("@selectedNumber", Convert.ToInt32(selectedNumber));
-
-                        // Выполнение запроса и получение результата
-                        object result = cmd.ExecuteScalar();
-
-                        // Проверка на null и преобразование результата
-                        if (result != null)
+                        try
                         {
-                            dvorId = Convert.ToInt32(result);
-                            MessageBox.Show($"Двор id = {dvorId}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            cmd.Parameters.AddWithValue("@name", name);
+                            cmd.Parameters.AddWithValue("@surname", surname);
+                            cmd.Parameters.AddWithValue("@contacts", contacts);
 
-                            // Используйте переменную dvorId по вашему усмотрению
+                            cmd.ExecuteNonQuery();
                         }
-                        else
+                        catch (Exception ex)
                         {
-                            // Если результат равен null, обработайте эту ситуацию
-                            MessageBox.Show("Двор не найден.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                            MessageBox.Show($"Произошла ошибка: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show($"Произошла ошибка: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }
-                //получение айди жителя
-                string query_zhitel_id = $"SELECT житель_id\r\n    " +
-                    $"    FROM Жители\r\n   " +
-                    $"     WHERE фамилия = @surname AND имя = @name AND контактная_информация = @contacts;";
-                using (NpgsqlCommand cmd = new NpgsqlCommand(query_zhitel_id, conn))
-                {
-                    try
-                    {
-                        cmd.Parameters.AddWithValue("@name", name);
-                        cmd.Parameters.AddWithValue("@surname", surname);
-                        cmd.Parameters.AddWithValue("@contacts", contacts);
 
-                        // Выполнение запроса и получение результата
-                        object result = cmd.ExecuteScalar();
+                    }
+                    //получени двора по адресу
+                    string query_dvor_by_names = $"SELECT двор_id\r\n    " +
+                      $"    FROM Дворы\r\n    " +
+                      $"    inner join Улицы on Дворы.улица  = Улицы.улица_id\r\n    " +
+                      $"    inner join Города on Дворы.город  = Города.город_id\r\n    " +
+                      $"    WHERE Города.название = @selectedCity and Улицы.название = @selectedStreet and Улицы.номер = @selectedNumber;";
 
-                        // Проверка на null и преобразование результата
-                        if (result != null)
+                    using (NpgsqlCommand cmd = new NpgsqlCommand(query_dvor_by_names, conn))
+                    {
+                        try
                         {
-                            zhitelId = Convert.ToInt32(result);
+                            string selectedCity = comboBoxCity.SelectedItem.ToString();
+                            string selectedStreet = comboBoxStreet.SelectedItem.ToString();
+                            string selectedNumber = comboBoxNumber.SelectedItem.ToString();
 
-                            // Используйте переменную dvorId по вашему усмотрению
+                            cmd.Parameters.AddWithValue("@selectedCity", selectedCity);
+                            cmd.Parameters.AddWithValue("@selectedStreet", selectedStreet);
+                            cmd.Parameters.AddWithValue("@selectedNumber", Convert.ToInt32(selectedNumber));
+
+                            // Выполнение запроса и получение результата
+                            object result = cmd.ExecuteScalar();
+
+                            // Проверка на null и преобразование результата
+                            if (result != null)
+                            {
+                                dvorId = Convert.ToInt32(result);
+
+                                // Используйте переменную dvorId по вашему усмотрению
+                            }
+                            else
+                            {
+                                // Если результат равен null, обработайте эту ситуацию
+                                MessageBox.Show("Двор не найден.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
                         }
-                        else
+                        catch (Exception ex)
                         {
-                            // Если результат равен null, обработайте эту ситуацию
-                            MessageBox.Show("Житель не найден.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show($"Произошла ошибка: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                     }
-                    catch (Exception ex)
+                    //получение айди жителя
+                    string query_zhitel_id = $"SELECT житель_id\r\n    " +
+                        $"    FROM Жители\r\n   " +
+                        $"     WHERE фамилия = @surname AND имя = @name AND контактная_информация = @contacts;";
+                    using (NpgsqlCommand cmd = new NpgsqlCommand(query_zhitel_id, conn))
                     {
+                        try
+                        {
+                            cmd.Parameters.AddWithValue("@name", name);
+                            cmd.Parameters.AddWithValue("@surname", surname);
+                            cmd.Parameters.AddWithValue("@contacts", contacts);
 
-                        MessageBox.Show($"Произошла ошибка: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            // Выполнение запроса и получение результата
+                            object result = cmd.ExecuteScalar();
+
+                            // Проверка на null и преобразование результата
+                            if (result != null)
+                            {
+                                zhitelId = Convert.ToInt32(result);
+
+                                // Используйте переменную dvorId по вашему усмотрению
+                            }
+                            else
+                            {
+                                // Если результат равен null, обработайте эту ситуацию
+                                MessageBox.Show("Житель не найден.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+
+                            MessageBox.Show($"Произошла ошибка: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+
                     }
-
-                }
-                //запись обращения в таблицу
-                string query_add_feedback = $"INSERT INTO Жалобы_и_предложения (двор_id, текст, дата_и_время_подачи, житель_id)" +
-                    $" VALUES (@dvor, @feedbackText, @feedback_datetime, @zhitel)";
-                using (NpgsqlCommand cmd = new NpgsqlCommand(query_add_feedback, conn))
-                {
-                    try
+                    //запись обращения в таблицу
+                    string query_add_feedback = $"INSERT INTO Жалобы_и_предложения (двор_id, текст, дата_и_время_подачи, житель_id)" +
+                        $" VALUES (@dvor, @feedbackText, @feedback_datetime, @zhitel)";
+                    using (NpgsqlCommand cmd = new NpgsqlCommand(query_add_feedback, conn))
                     {
-                        cmd.Parameters.AddWithValue("@dvor", dvorId);
-                        cmd.Parameters.AddWithValue("@feedbackText", feedbackText);
-                        cmd.Parameters.AddWithValue("@feedback_datetime", feedback_datetime);
-                        cmd.Parameters.AddWithValue("@zhitel", zhitelId);
+                        try
+                        {
+                            cmd.Parameters.AddWithValue("@dvor", dvorId);
+                            cmd.Parameters.AddWithValue("@feedbackText", feedbackText);
+                            cmd.Parameters.AddWithValue("@feedback_datetime", feedback_datetime);
+                            cmd.Parameters.AddWithValue("@zhitel", zhitelId);
 
-                        cmd.ExecuteNonQuery();
+                            cmd.ExecuteNonQuery();
 
-                        MessageBox.Show($"Успешно отправлено!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show($"Содержимое вашего обращения:\n\n"+
+                                                 $"Фамилия: {textBoxSurname.Text}\n\n"+
+                                                 $"Имя: {textBoxName.Text}\n\n" +
+                                                 $"Адрес: {comboBoxCity.Text}, {comboBoxStreet.Text}, {comboBoxNumber.Text}\n\n" +
+                                                 $"Контактная информация: {textBoxContact.Text}\n\n"+
+                                                 $"Текст обращения: {textBox3.Text}\n\n" , "Ваше обращение отправлено", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            textBoxSurname.Text = "";
+                            textBoxName.Text = "";
+                            textBoxContact.Text = "";
+                            comboBoxCity.Text = "";
+                            comboBoxStreet.Text = "";
+                            comboBoxNumber.Text = "";
+                            textBox3.Text = "";
+                            textBox1.Text = "";
+                            GenerateCaptcha();
 
-                    }
-                    catch (Exception ex)
-                    {
+                        }
+                        catch (Exception ex)
+                        {
 
-                        MessageBox.Show($"Произошла ошибка!\r\n{ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        //\r\nдвор= {dvorId},\r\nтекст = {feedbackText}\r\n,время={feedback_datetime}\r\n,житель={zhitelId}, 
+                            MessageBox.Show($"Произошла ошибка!\r\n{ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            //\r\nдвор= {dvorId},\r\nтекст = {feedbackText}\r\n,время={feedback_datetime}\r\n,житель={zhitelId}, 
+                        }
                     }
                 }
             }
-        }
+            else
+            {
+                MessageBox.Show("Капча не пройдена. Попробуйте еще раз");
+                GenerateCaptcha();
+
+            }
+            }
 
         private void buttonBack_Click(object sender, EventArgs e)
         {

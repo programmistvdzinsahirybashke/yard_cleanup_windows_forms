@@ -71,7 +71,7 @@ namespace Ychebka
             {
                 conn.Open();
 
-                string query = "Select * from Сотрудники";
+                string query = "Select Сотрудники.сотрудник_id, Сотрудники.фамилия, Сотрудники.имя, Сотрудники.отчество,Сотрудники.должность, Сотрудники.серия_номер_паспорта, Сотрудники.адрес_жительства, Сотрудники.контактная_информация, Сотрудники.логин, Сотрудники.пароль, Должности.название from Сотрудники join Должности on Сотрудники.должность = Должности.должность_id";
                 NpgsqlDataAdapter adapter = new NpgsqlDataAdapter(query, conn);
                 DataTable data = new DataTable();
                 adapter.Fill(data);
@@ -160,7 +160,11 @@ namespace Ychebka
             {
                 conn.Open();
 
-                string query = "SELECT * FROM Сотрудники";
+                string query = "Select Сотрудники.сотрудник_id, Сотрудники.фамилия, Сотрудники.имя," +
+                    " Сотрудники.отчество,Сотрудники.должность,Должности.название , " +
+                    "Сотрудники.серия_номер_паспорта, Сотрудники.адрес_жительства, " +
+                    "Сотрудники.контактная_информация, Сотрудники.логин, Сотрудники.пароль" +
+                    " from Сотрудники join Должности on Сотрудники.должность = Должности.должность_id";
                 NpgsqlDataAdapter adapter = new NpgsqlDataAdapter(query, conn);
                 DataTable data = new DataTable();
                 adapter.Fill(data);
@@ -247,7 +251,12 @@ namespace Ychebka
             {
 
                 conn.Open();
-                string query = $"Select * from Сотрудники WHERE фамилия LIKE  '%{textBoxSearch.Text}%'";
+                string query = $"Select Сотрудники.сотрудник_id, Сотрудники.фамилия," +
+                    " Сотрудники.имя, Сотрудники.отчество, Сотрудники.должность, Должности.название, " +
+                    "Сотрудники.серия_номер_паспорта, Сотрудники.адрес_жительства, Сотрудники.контактная_информация, " +
+                    "Сотрудники.логин, Сотрудники.пароль" +
+                    " from Сотрудники" +
+                    $" join Должности on Сотрудники.должность = Должности.должность_id WHERE фамилия LIKE  '%{textBoxSearch.Text}%'";
 
                 NpgsqlDataAdapter adapter = new NpgsqlDataAdapter(query, conn);
                 DataTable table = new DataTable();

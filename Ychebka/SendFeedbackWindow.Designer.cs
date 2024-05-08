@@ -43,6 +43,10 @@
             this.comboBoxCity = new System.Windows.Forms.ComboBox();
             this.comboBoxStreet = new System.Windows.Forms.ComboBox();
             this.comboBoxNumber = new System.Windows.Forms.ComboBox();
+            this.captchaPictureBox = new System.Windows.Forms.PictureBox();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.label7 = new System.Windows.Forms.Label();
+            ((System.ComponentModel.ISupportInitialize)(this.captchaPictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // label3
@@ -167,7 +171,7 @@
             this.textBox3.Location = new System.Drawing.Point(18, 413);
             this.textBox3.Multiline = true;
             this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(989, 196);
+            this.textBox3.Size = new System.Drawing.Size(986, 115);
             this.textBox3.TabIndex = 18;
             // 
             // comboBoxCity
@@ -199,11 +203,41 @@
             this.comboBoxNumber.Size = new System.Drawing.Size(113, 34);
             this.comboBoxNumber.TabIndex = 22;
             // 
+            // captchaPictureBox
+            // 
+            this.captchaPictureBox.Location = new System.Drawing.Point(20, 535);
+            this.captchaPictureBox.Name = "captchaPictureBox";
+            this.captchaPictureBox.Size = new System.Drawing.Size(399, 41);
+            this.captchaPictureBox.TabIndex = 23;
+            this.captchaPictureBox.TabStop = false;
+            // 
+            // textBox1
+            // 
+            this.textBox1.BackColor = System.Drawing.SystemColors.ScrollBar;
+            this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.25F);
+            this.textBox1.Location = new System.Drawing.Point(198, 582);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(221, 32);
+            this.textBox1.TabIndex = 24;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Arial Rounded MT Bold", 16F);
+            this.label7.Location = new System.Drawing.Point(23, 586);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(169, 26);
+            this.label7.TabIndex = 25;
+            this.label7.Text = "Введите капчу:";
+            // 
             // SendFeedbackWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1026, 751);
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.captchaPictureBox);
             this.Controls.Add(this.comboBoxNumber);
             this.Controls.Add(this.comboBoxStreet);
             this.Controls.Add(this.comboBoxCity);
@@ -223,6 +257,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Отправить обращение";
             this.Load += new System.EventHandler(this.SendFeedbackWindow_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.captchaPictureBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -245,5 +280,8 @@
         private System.Windows.Forms.ComboBox comboBoxCity;
         private System.Windows.Forms.ComboBox comboBoxStreet;
         private System.Windows.Forms.ComboBox comboBoxNumber;
+        private System.Windows.Forms.PictureBox captchaPictureBox;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Label label7;
     }
 }
