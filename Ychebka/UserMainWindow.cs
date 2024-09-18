@@ -358,7 +358,7 @@ namespace Ychebka
         {
             try
             {
-                if (dataGridViewTasks.CurrentRow != null && dataGridViewTasks.CurrentRow.Cells["задача_id"] != null && dataGridViewTasks.CurrentRow.Cells["задача_id"].Value != null)
+                if (dataGridViewTasks.CurrentRow != null && dataGridViewTasks.CurrentRow.Cells["задача_id"] != null && dataGridViewTasks.CurrentRow.Cells["задача_id"].Value != null && selectedImagePath != null) 
                 {
                     int taskId = Convert.ToInt32(dataGridViewTasks.CurrentRow.Cells["задача_id"].Value);
                     DataRowView selectedRowforotchet = comboBoxStatus.SelectedItem as DataRowView;
@@ -433,7 +433,7 @@ namespace Ychebka
                 }
                 else
                 {
-                    MessageBox.Show("Выберите задачу", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Добавьте фото", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             catch (Exception ex)
